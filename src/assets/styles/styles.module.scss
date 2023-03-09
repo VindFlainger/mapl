@@ -1,0 +1,15 @@
+body .sans {
+    font-family: "Source Code Pro", sans-serif !important;
+}
+
+.text-title {
+    text-transform: lowercase !important;
+}
+
+.text-title:first-letter{
+    text-transform: uppercase !important;
+}
+
+.pointer{
+    cursor: pointer;
+}

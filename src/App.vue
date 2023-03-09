@@ -1,26 +1,83 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <v-app>
+    <app-header>
+
+    </app-header>
+    <v-main class="fill-height">
+      <v-container>
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+
+    <v-footer>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, reiciendis.
+    </v-footer>
+
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import {mapGetters} from "vuex";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  computed: {
+    ...mapGetters({
+      isLogin: 'isLogin'
+    })
+  },
+  mounted() {
+    if (this.isLogin) {
+      this.$store.dispatch('authed')
+    }
+  },
 }
 </script>
 
-<style>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,200;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+@import "@/assets/styles/styles.module.scss";
+@import "@/assets/styles/reset.module.scss";
+
+
+a {
+  color: #007eff;
+  text-decoration: none;
+}
+
+
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: grey;
+}
+
+::-webkit-scrollbar-thumb {
+  background: white;
+}
+
 </style>
+<script setup>
+import AppHeader from "@/components/Specialized/App/Header/AppHeader.vue";
+</script>

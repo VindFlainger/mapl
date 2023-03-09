@@ -1,0 +1,57 @@
+{
+  "common": {
+    "inputs": {
+      "password": "Password",
+      "email": "Email",
+      "summary": "Summary",
+      "review": "Review",
+      "rating": "Rating"
+    },
+    "validation-errors": {
+      "required": "{param} is required",
+      "password-length": "Password should contain at least {n} symbols",
+      "password-symbol": "Password should contain at least one special symbol, including [!#$%^&*()_+-<>?]",
+      "password-secret": "Your password should not match the login",
+      "password-incorrect": "Incorrect password",
+      "email-invalid": "Invalid email"
+    },
+    "buttons": {
+      "login": "Login",
+      "sign-up": "Sign up",
+      "save": "Save",
+      "retry": "Retry"
+    },
+    "labels": {
+      "loading": "loading",
+      "problem": "fetching error"
+    }
+  },
+  "login": {
+    "header": "Login",
+    "forget-password": "Forget password?",
+    "new-user": "New user?"
+  },
+  "header": {
+    "my-account": "My Account",
+    "logout": "Sign Out",
+    "bonus": "Bonus Program",
+    "reviews": "Reviews",
+    "orders": "Orders",
+    "login": "Sign In"
+  },
+  "product": {
+    "color": "color",
+    "size": "size",
+    "promotion-tip": "promotional products disappear at a rapid pace. hurry if you don't want to miss a lower price!",
+    "add-to-cart": "add to card",
+    "notify": "notify about availability",
+    "about": "About",
+    "delivery": "Delivery",
+    "reviews": "Reviews",
+    "features": "features",
+    "description": "description",
+    "detailed": "detailed information about",
+    "your-review": "Your review",
+    "other-reviews": "Other reviews"
+  }
+}
