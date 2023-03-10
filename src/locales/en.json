@@ -19,7 +19,8 @@
       "login": "Login",
       "sign-up": "Sign up",
       "save": "Save",
-      "retry": "Retry"
+      "retry": "Retry",
+      "load-more": "Load more"
     },
     "labels": {
       "loading": "loading",
@@ -53,5 +54,33 @@
     "detailed": "detailed information about",
     "your-review": "Your review",
     "other-reviews": "Other reviews"
+  },
+  "customer": {
+    "menu": {
+      "dashboard": "my dashboard",
+      "shipping": "my shipping",
+      "orders": "order history",
+      "newsletter": "newsletter subscription",
+      "reviews": "my reviews",
+      "wishlist": "my wishlist",
+      "bonuses": "my bonuses"
+    },
+    "reviews": {
+      "section-name": "My reviews",
+      "my-reviews": "my product reviews"
+    },
+    "shipping": {
+      "section-name": "My shipping",
+      "contact-info": "Contact Information",
+      "about": "You can pick saved contact and address information when you are ordering product.",
+      "address": "Address",
+      "first-name": "First Name",
+      "last-name": "Last Name",
+      "phone": "Phone number",
+      "location": "Location",
+      "city": "City",
+      "house": "House number",
+      "postcode": "Postcode"
+    }
   }
 }

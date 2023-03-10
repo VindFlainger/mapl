@@ -1,52 +1,62 @@
 import {createMachine} from "xstate";
+import {computed, ref} from "vue";
 import {useMachine} from "@xstate/vue";
 
-const config = {
-    id: 'fetching',
+const initMachine = name => createMachine({
+    id: name,
     initial: 'waiting',
-    type: 'parallel'
-}
-
-const getParallelState = process => ({
-    initial: 'waiting',
+    predictableActionArguments: true,
     states: {
-        waiting: {
+        'waiting': {
             on: {
-                [`${process.toUpperCase()}_FETCH`]: 'fetching'
+                FETCH: 'fetching'
             }
         },
-        fetching: {
+        'fetching': {
             on: {
-                [`${process.toUpperCase()}_RESOLVE`]: 'resolved',
-                [`${process.toUpperCase()}_REJECT`]: 'rejected'
+                RESOLVE: 'resolved',
+                REJECT: 'rejected'
             }
         },
-        rejected: {
+        'rejected': {
             on: {
-                [`${process.toUpperCase()}_FETCH`]: 'fetching'
+                FETCH: 'fetching'
             }
         },
-        resolved: {
+        'resolved': {
             on: {
-                [`${process.toUpperCase()}_FETCH`]: 'fetching'
+                FETCH: 'fetching'
             }
-        }
+        },
     }
 })
 
-export default function (processes) {
-    const states = {}
+export function useFetching(name) {
+    const {send, state} = useMachine(initMachine(name))
+    const resolvedFirst = ref(false)
 
-    processes.forEach(process => {
-        states[process] = getParallelState(process)
-    })
+    const fetch = () => {
+        send('FETCH')
+    }
+    const reject = () => {
+        send('REJECT')
+    }
+    const resolve = () => {
+        resolvedFirst.value = true
+        send('RESOLVE')
+    }
 
-    const machine = createMachine({...config, states: states})
-
-    const {send, state} = useMachine(machine)
+    const fetching = computed(() => state.value.value === 'fetching')
+    const rejected = computed(() => state.value.value === 'rejected')
+    const resolved = computed(() => state.value.value === 'resolved')
 
     return {
-        send,
-        state
+        fetching,
+        rejected,
+        resolved,
+        fetch,
+        reject,
+        resolve,
+        resolvedFirst
     }
 }

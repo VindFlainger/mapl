@@ -1,4 +1,7 @@
 <template>
+  <metainfo>
+    <template v-slot:title="{ content }">{{ content ? `${content} | Mapl` : `Mapl` }}</template>
+  </metainfo>
   <v-app>
     <app-header>
 
@@ -9,9 +12,9 @@
       </v-container>
     </v-main>
 
-    <v-footer>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, reiciendis.
-    </v-footer>
+    <app-footer>
+
+    </app-footer>
 
   </v-app>
 </template>
@@ -29,7 +32,7 @@ export default {
     if (this.isLogin) {
       this.$store.dispatch('authed')
     }
-  },
+  }
 }
 </script>
 
@@ -80,4 +83,5 @@ nav a.router-link-exact-active {
 </style>
 <script setup>
 import AppHeader from "@/components/Specialized/App/Header/AppHeader.vue";
+import AppFooter from "@/components/Specialized/App/Footer/AppFooter.vue";
 </script>
