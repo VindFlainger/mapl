@@ -1,6 +1,7 @@
 import {createMachine} from "xstate";
 import {computed, ref} from "vue";
 import {useMachine} from "@xstate/vue";
+import {useStore} from "vuex";
 
 const initMachine = name => createMachine({
     id: name,
@@ -34,6 +35,7 @@ const initMachine = name => createMachine({
 export function useFetching(name) {
     const {send, state} = useMachine(initMachine(name))
     const resolvedFirst = ref(false)
+    const store = useStore()
 
     const fetch = () => {
         send('FETCH')
@@ -41,9 +43,15 @@ export function useFetching(name) {
     const reject = () => {
         send('REJECT')
     }
-    const resolve = () => {
+    const resolve = (options = {}) => {
         resolvedFirst.value = true
         send('RESOLVE')
+        if (options.notification) {
+            store.dispatch('addNotification', {
+                message: options.notification,
+                type: 'success'
+            })
+        }
     }
 
     const fetching = computed(() => state.value.value === 'fetching')

@@ -2,6 +2,8 @@
   <metainfo>
     <template v-slot:title="{ content }">{{ content ? `${content} | Mapl` : `Mapl` }}</template>
   </metainfo>
+  <app-overlay v-show="isLoading"></app-overlay>
+  <alerts-box></alerts-box>
   <v-app>
     <app-header>
 
@@ -15,25 +17,29 @@
     <app-footer>
 
     </app-footer>
-
   </v-app>
 </template>
 
-<script>
-import {mapGetters} from "vuex";
+<script setup>
 
-export default {
-  computed: {
-    ...mapGetters({
-      isLogin: 'isLogin'
-    })
-  },
-  mounted() {
-    if (this.isLogin) {
-      this.$store.dispatch('authed')
-    }
+import {computed, onMounted} from "vue";
+import {useStore} from "vuex";
+import AppFooter from "@/components/Specialized/App/Footer/AppFooter.vue";
+import AppHeader from "@/components/Specialized/App/Header/AppHeader.vue";
+import AppOverlay from "@/components/Specialized/App/AppOverlay.vue";
+import AlertsBox from "@/components/UI/Alerts/NotificationsBox.vue";
+
+const store = useStore()
+
+const isLogin = computed(() => store.getters.isLogin)
+const isLoading = computed(() => store.getters.isLoading)
+
+onMounted(() => {
+  if (isLogin.value) {
+    store.dispatch('authed')
   }
-}
+})
+
 </script>
 
 <style lang="scss">
@@ -46,7 +52,6 @@ a {
   color: #007eff;
   text-decoration: none;
 }
-
 
 
 #app {
@@ -81,7 +86,3 @@ nav a.router-link-exact-active {
 }
 
 </style>
-<script setup>
-import AppHeader from "@/components/Specialized/App/Header/AppHeader.vue";
-import AppFooter from "@/components/Specialized/App/Footer/AppFooter.vue";
-</script>

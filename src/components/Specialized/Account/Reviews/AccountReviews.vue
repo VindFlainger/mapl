@@ -58,14 +58,14 @@
       </v-list>
 
       <ui-loading-status
-          :problem="rejected"
-          :loading="fetching"
+          :problem="reviewsFetching.rejected"
+          :loading="reviewsFetching.fetching"
           @retry="getReviews"
       ></ui-loading-status>
 
       <v-row justify="center">
         <ui-button-default
-            v-if="!isAllLoaded && !fetching && !rejected"
+            v-if="!reviewsFetching.isAllLoaded && !reviewsFetching.fetching && !reviewsFetching.rejected"
             @click="getReviews"
         >
           {{ $t('common.buttons.load-more') }}
@@ -76,78 +76,50 @@
   </div>
 </template>
 
-<script>
-import requests from "@/mixins/requests";
+<script setup>
+import {onMounted, reactive} from "vue";
+
 import UiImg from "@/components/UI/UiImg.vue";
-import UiLoadingStatus from "@/components/UI/UiLoadingStatus.vue";
-import {useInfinityFetching} from "@/composables/useInfinityFetching";
 import UiButtonDefault from "@/components/UI/Buttons/UiButtonDefault.vue";
+import UiLoadingStatus from "@/components/UI/UiLoadingStatus.vue";
+
+import {useInfinityFetching} from "@/composables/useInfinityFetching";
 import {useMeta} from "vue-meta";
-import i18n from "@/i18n";
+import {useI18n} from "vue-i18n";
+import {useFetch} from "@/composables/useFetch";
 
-export default {
-  name: "AccountReviews",
-  components: {UiButtonDefault, UiLoadingStatus, UiImg},
-  mixins: [requests],
-  data() {
-    return {
-      reviews: []
-    }
-  },
-  mounted() {
-    this.getReviews()
-  },
-  methods: {
-    getReviews() {
-      this.fetch()
-      this.getDataAuthed('/customer/account/getReviews',
-          null,
-          {
-            params: {
-              offset: this.offset,
-              limit: this.limit
-            }
-          }
-      )
-          .then(resp => {
-            this.reviews.push(...resp.data.reviews)
-            this.resolve(resp.data)
-          })
-          .catch(() => {
-            this.reject()
-          })
-    }
-  },
-  setup() {
-    useMeta({
-      title: i18n.global.t('customer.reviews.section-name')
-    })
+const {t} = useI18n()
+const {getDataAuthed} = useFetch()
 
-    const {
-      rejected,
-      resolved,
-      fetching,
-      fetch,
-      resolve,
-      reject,
-      isAllLoaded,
-      offset,
-      limit
-    } = useInfinityFetching({limit: 10, name: 'reviews'})
+useMeta({
+  title: t('customer.reviews.section-name')
+})
 
-    return {
-      rejected,
-      resolved,
-      fetching,
-      fetch,
-      resolve,
-      reject,
-      isAllLoaded,
-      offset,
-      limit,
-    }
-  },
+const reviews = reactive([])
+const reviewsFetching = reactive(useInfinityFetching({limit: 10, name: 'reviews'}))
+
+const getReviews = () => {
+  reviewsFetching.fetch()
+  getDataAuthed('/customer/account/getReviews',
+      {
+        params: {
+          offset: reviewsFetching.offset,
+          limit: reviewsFetching.limit
+        }
+      }
+  )
+      .then(resp => {
+        reviews.push(...resp.data.reviews)
+        reviewsFetching.resolve(resp.data)
+      })
+      .catch(() => {
+        reviewsFetching.reject()
+      })
 }
+
+onMounted(() => {
+  getReviews()
+})
 </script>
 
 <style scoped>

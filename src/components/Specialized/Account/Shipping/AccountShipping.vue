@@ -7,12 +7,12 @@
   </p>
   <div>
     <ui-loading-status
-      :problem="rejected"
-      :loading="fetching"
-      @retry="getShipping"
+        :problem="shippingFetching.rejected"
+        :loading="shippingFetching.fetching"
+        @retry="getShipping"
     ></ui-loading-status>
 
-    <v-form ref="form" v-if="resolved">
+    <v-form ref="form" v-if="shippingFetching.resolved">
       <v-row class="mt-4">
         <v-col class="pa-0">
           <h5 class="font-weight-bold text-h6">
@@ -100,113 +100,106 @@
   </div>
 </template>
 
-<script>
-import {useMeta} from "vue-meta";
-import i18n from "@/i18n";
+<script setup>
+import {computed, onMounted, reactive, ref} from "vue";
+
 import UiInputDefault from "@/components/UI/Inputs/UiInputDefault.vue";
 import UiButtonDefault from "@/components/UI/Buttons/UiButtonDefault.vue";
 import UiSelectDefault from "@/components/UI/Inputs/UiSelectDefault.vue";
-import requests from "@/mixins/requests";
-import {mapGetters} from "vuex";
-import {useFetching} from "@/composables/useFetching";
 import UiLoadingStatus from "@/components/UI/UiLoadingStatus.vue";
 
-export default {
-  name: "AccountShipping",
-  components: {UiLoadingStatus, UiSelectDefault, UiButtonDefault, UiInputDefault},
-  mixins: [requests],
-  data() {
-    return {
-      firstName: '',
-      lastName: '',
-      phone: '',
-      location: '',
-      city: '',
-      house: '',
-      postcode: '',
-      street: '',
-      locationOptions: []
-    }
-  },
-  methods: {
-    getShipping() {
-      this.fetch()
-      this.getDataAuthed('/customer/account/getShipping')
-          .then(resp => {
-            this.firstName = resp.data.firstName
-            this.lastName = resp.data.lastName
-            this.phone = resp.data.phone
-            this.location = resp.data.location
-            this.city = resp.data.city
-            this.street = resp.data.street
-            this.house = resp.data.house
-            this.postcode = resp.data.postcode
-            this.resolve()
-          })
-          .catch(() => {
-            this.reject()
-          })
-    },
-    getLocations() {
-      this.getData(`/data/getLocations?language=${this.language}`)
-          .then(resp => {
-            this.locationOptions = resp.data
-          })
-          .catch(() => {
-          })
-    },
-    setShipping() {
-      if (this.$refs.form.validate()) {
-        this.postDataAuthed(`/customer/account/setShipping`, {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          phone: this.phone,
-          location: this.location,
-          city: this.city,
-          street: this.street,
-          house: this.house,
-          postcode: this.postcode
+import {useMeta} from "vue-meta";
+import {useStore} from "vuex";
+import {useI18n} from "vue-i18n";
+import {useFetching} from "@/composables/useFetching";
+import {useFetch} from "@/composables/useFetch";
+import {ADD_LOADING, DEL_LOADING} from "@/store/mutation-types";
+
+const {t} = useI18n()
+const store = useStore()
+const form = ref(null)
+const {postDataAuthed, getData, getDataAuthed} = useFetch()
+
+useMeta({
+  title: t('customer.shipping.section-name')
+})
+
+
+const firstName = ref('')
+const lastName = ref('')
+const phone = ref('')
+const location = ref('')
+const city = ref('')
+const street = ref('')
+const house = ref('')
+const postcode = ref('')
+
+const shippingFetching = reactive(useFetching('shipping'))
+const getShipping = () => {
+  shippingFetching.fetch()
+  getDataAuthed('/customer/account/getShipping')
+      .then(resp => {
+        firstName.value = resp.data.firstName
+        lastName.value = resp.data.lastName
+        phone.value = resp.data.phone
+        location.value = resp.data.location
+        city.value = resp.data.city
+        street.value = resp.data.street
+        house.value = resp.data.house
+        postcode.value = resp.data.postcode
+        shippingFetching.resolve()
+      })
+      .catch(() => {
+        shippingFetching.reject()
+      })
+}
+
+const setShipping = () => {
+  store.commit(ADD_LOADING)
+  if (form.value.validate()) {
+    postDataAuthed(`/customer/account/setShipping`, {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          phone: phone.value,
+          location: location.value,
+          city: city.value,
+          street: street.value,
+          house: house.value,
+          postcode: postcode.value
+        },
+        null
+        ,
+        {
+          handleSuccess: true,
+          successMessage: t('customer.shipping.shipping-changed'),
+          handleError: true
+        }
+    )
+        .catch(() => {
         })
-            .then(() => {
-            })
-            .catch(() => {
-            })
-      }
-    }
-  },
-  computed: {
-    ...mapGetters({
-      language: 'getLanguage'
-    })
-  },
-  mounted() {
-    this.getShipping()
-    this.getLocations()
-  },
-  setup() {
-    useMeta({
-      title: i18n.global.t('customer.shipping.section-name')
-    })
-
-    const {
-      reject,
-      resolved,
-      fetch,
-      fetching,
-      rejected,
-      resolve
-    } = useFetching('shipping')
-
-    return {
-      reject,
-      resolved,
-      fetch,
-      fetching,
-      rejected,
-      resolve
-    }
+        .finally(() => store.commit(DEL_LOADING))
   }
 }
+
+
+const language = computed(() => store.getters.getLanguage)
+const locationOptions = ref('')
+const getLocations = () => {
+  getData(`/data/getLocations?language=${language.value}`)
+      .then(resp => {
+        locationOptions.value = resp.data
+      })
+      .catch(() => {
+      })
+}
+
+
+onMounted(() => {
+  getShipping()
+  getLocations()
+})
+
+
 </script>
 
 <style scoped>

@@ -20,10 +20,15 @@ export function useInfinityFetching(options) {
         resolvedFirst
     } = useFetching(options.name || 'machine')
 
-    const resolve = data => {
+    const resolve = (data, options = {}) => {
         offset.value = data.nextOffset
         totalCount.value = data.totalCount
-        $resolve()
+        $resolve(options)
+    }
+
+    const correct = v => {
+        offset.value += v
+        totalCount.value += v
     }
 
     return {
@@ -36,6 +41,7 @@ export function useInfinityFetching(options) {
         fetch,
         reject,
         resolved,
-        resolvedFirst
+        resolvedFirst,
+        correct
     }
 }

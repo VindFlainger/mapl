@@ -1,5 +1,8 @@
 {
   "common": {
+    "notifications": {
+      "success": "operation performed successfully"
+    },
     "inputs": {
       "password": "Password",
       "email": "Email",
@@ -22,7 +25,9 @@
       "sign-up": "Sign up",
       "save": "Save",
       "retry": "Retry",
-      "load-more": "Load more"
+      "load-more": "Load more",
+      "view": "View",
+      "remove": "Remove"
     },
     "labels": {
       "loading": "loading",
@@ -83,7 +88,13 @@
       "city": "City",
       "street": "Street",
       "house": "House number",
-      "postcode": "Postcode"
+      "postcode": "Postcode",
+      "shipping-changed": "Shipping data is successfully changed"
+    },
+    "wishlist": {
+      "section-name": "Wishlist",
+      "no-wishes": "You have no items in your wish list.",
+      "wish-deleted": "Sku is successfully deleted from wishlist"
     }
   }
 }
