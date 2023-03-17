@@ -30,45 +30,43 @@
   </v-row>
 </template>
 
-<script>
-export default {
-  name: "CustomerView",
-  computed: {
-    links() {
-      return [
-        {
-          name: this.$t('customer.menu.dashboard'),
-          link: {name: 'customer-dashboard'}
-        },
-        {
-          name: this.$t('customer.menu.shipping'),
-          link: {name: 'customer-shipping'}
-        },
-        {
-          name: this.$t('customer.menu.orders'),
-          link: {name: 'customer-orders'}
-        },
-        {
-          name: this.$t('customer.menu.newsletter'),
-          link: {name: 'customer-newsletter'}
-        },
-        {
-          name: this.$t('customer.menu.reviews'),
-          link: {name: 'customer-reviews'}
-        },
-        {
-          name: this.$t('customer.menu.wishlist'),
-          link: {name: 'customer-wishlist'}
-        },
-        {
-          name: this.$t('customer.menu.bonuses'),
-          link: {name: 'customer-bonuses'}
-        },
+<script setup>
+import {computed} from "vue";
+import {useI18n} from "vue-i18n";
+const {t} = useI18n()
 
-      ]
-    }
-  }
-}
+const links = computed(() => [
+  {
+    name: t('customer.menu.dashboard'),
+    link: {name: 'customer-dashboard'}
+  },
+  {
+    name: t('customer.menu.shipping'),
+    link: {name: 'customer-shipping'}
+  },
+  {
+    name: t('customer.menu.orders'),
+    link: {name: 'customer-orders'}
+  },
+  {
+    name: t('customer.menu.newsletter'),
+    link: {name: 'customer-newsletter'}
+  },
+  {
+    name: t('customer.menu.reviews'),
+    link: {name: 'customer-reviews'}
+  },
+  {
+    name: t('customer.menu.wishlist'),
+    link: {name: 'customer-wishlist'}
+  },
+  {
+    name: t('customer.menu.bonuses'),
+    link: {name: 'customer-bonuses'}
+  },
+])
+
+
 </script>
 
 <style scoped>

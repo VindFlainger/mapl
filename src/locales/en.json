@@ -13,7 +13,9 @@
       "password-symbol": "Password should contain at least one special symbol, including [!#$%^&*()_+-<>?]",
       "password-secret": "Your password should not match the login",
       "password-incorrect": "Incorrect password",
-      "email-invalid": "Invalid email"
+      "email-invalid": "Invalid email",
+      "phone-invalid": "Please enter only numbers without spaces. (example: 375293828333).",
+      "postcode-invalid": "Please enter only numbers without spaces. (example: 230005)."
     },
     "buttons": {
       "login": "Login",
@@ -79,6 +81,7 @@
       "phone": "Phone number",
       "location": "Location",
       "city": "City",
+      "street": "Street",
       "house": "House number",
       "postcode": "Postcode"
     }

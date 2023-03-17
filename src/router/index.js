@@ -10,6 +10,7 @@ import AccountReviews from "@/components/Specialized/Account/Reviews/AccountRevi
 import AccountOrders from "@/components/Specialized/Account/Orders/AccountOrders.vue";
 import AccountWishlist from "@/components/Specialized/Account/Wishlist/AccountWishlist.vue";
 import AccountAddresses from "@/components/Specialized/Account/Shipping/AccountShipping.vue";
+import TestView from "@/views/TestView.vue";
 
 const routes = [
     {
@@ -57,6 +58,11 @@ const routes = [
                 component: AccountAddresses
             }
         ]
+    },
+    {
+        path: '/test',
+        name: 'test-view',
+        component: TestView
     },
     {
         path: '/product/:id',
