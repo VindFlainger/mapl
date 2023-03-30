@@ -2,7 +2,7 @@
   <v-row class="pa-4">
     <v-card
         width="270"
-        height="280"
+        height="310"
         elevation="0"
         color="grey-lighten-2"
         rounded="0"
@@ -63,6 +63,10 @@ const links = computed(() => [
   {
     name: t('customer.menu.bonuses'),
     link: {name: 'customer-bonuses'}
+  },
+  {
+    name: t('customer.menu.payment'),
+    link: {name: 'customer-payment'}
   },
 ])
 

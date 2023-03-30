@@ -4,11 +4,11 @@
   </metainfo>
   <app-overlay v-show="isLoading"></app-overlay>
   <alerts-box></alerts-box>
-  <v-app>
+  <v-app class="app">
     <app-header>
 
     </app-header>
-    <v-main class="fill-height">
+    <v-main class="main">
       <v-container>
         <router-view></router-view>
       </v-container>
@@ -22,7 +22,7 @@
 
 <script setup>
 
-import {computed, onMounted} from "vue";
+import {computed,  onMounted} from "vue";
 import {useStore} from "vuex";
 import AppFooter from "@/components/Specialized/App/Footer/AppFooter.vue";
 import AppHeader from "@/components/Specialized/App/Header/AppHeader.vue";
@@ -34,9 +34,13 @@ const store = useStore()
 const isLogin = computed(() => store.getters.isLogin)
 const isLoading = computed(() => store.getters.isLoading)
 
-onMounted(() => {
+
+onMounted(()=>{
+  store.dispatch('initStore')
   if (isLogin.value) {
     store.dispatch('authed')
+  } else {
+    store.dispatch('noRegister')
   }
 })
 
@@ -58,6 +62,10 @@ a {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.main{
+  min-height: 100vh;
 }
 
 nav {

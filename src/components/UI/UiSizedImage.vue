@@ -1,7 +1,8 @@
 <template>
-  <v-img :src="image || require('@/assets/images/defaults/defaultimage.png')">
-
-  </v-img>
+  <v-img
+      :src="image || require('@/assets/images/defaults/defaultimage.png')"
+      cover
+  ></v-img>
 </template>
 
 <script>
@@ -10,7 +11,7 @@ export default {
   props: {
     images: {
       type: Array,
-      default: ()=>{
+      default: () => {
         return []
       }
     },
@@ -21,7 +22,7 @@ export default {
   },
   computed: {
     image() {
-      return this.images.find(image => image.size === this.imageSize)?.url
+      return this.images?.find(image => image.size === this.imageSize)?.url
     }
   }
 }

@@ -49,4 +49,13 @@ export default {
   font-weight: lighter;
 }
 
+.input >>> input::-webkit-inner-spin-button {
+  display: none;
+}
+
+.input >>> input[type=number]{
+  padding: 5px;
+  text-align: center;
+}
+
 </style>

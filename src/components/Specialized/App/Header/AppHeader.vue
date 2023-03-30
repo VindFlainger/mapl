@@ -23,11 +23,18 @@
         <v-img :src="require('@/assets/images/logos/mainlogo.png')" width="200" cover></v-img>
       </div>
       <v-spacer></v-spacer>
-      <v-icon
-          class="pointer"
-          icon="mdi-cart-outline"
-          size="large"
-      ></v-icon>
+      <v-badge>
+        <template v-slot:badge>
+          {{ cartItemsCount }}
+        </template>
+        <router-link :to="{name: 'cart'}">
+          <v-icon
+              class="pointer text-grey-darken-4"
+              icon="mdi-cart-outline"
+              size="large"
+          ></v-icon>
+        </router-link>
+      </v-badge>
       <v-icon
           class="pointer ml-5"
           icon="mdi-heart-outline"
@@ -41,31 +48,24 @@
 
 </template>
 
-<script>
+<script setup>
 import AppHeaderMenu from "@/components/Specialized/App/Header/AppHeaderMenu.vue";
 import UiInputDropdown from "@/components/UI/Inputs/UiInputDropdown.vue";
-import {mapGetters, mapMutations} from "vuex";
+import {useStore} from "vuex";
 import {SET_CURRENCY, SET_LANGUAGE} from "@/store/mutation-types";
+import {computed} from "vue";
 
-export default {
-  name: "AppHeader",
-  components: {UiInputDropdown, AppHeaderMenu},
-  computed: {
-    ...mapGetters({
-      currency: 'getCurrency',
-      language: 'getLanguage',
-      location: 'getLocation',
-      currencies: 'getCurrencies',
-      languages: 'getLanguages'
-    })
-  },
-  methods: {
-    ...mapMutations({
-      setCurrency: SET_CURRENCY,
-      setLanguage: SET_LANGUAGE
-    })
-  }
-}
+const store = useStore()
+
+const currency = computed(() => store.getters.getCurrency)
+const language = computed(() => store.getters.getLanguage)
+const currencies = computed(() => store.getters.getCurrencies)
+const languages = computed(() => store.getters.getLanguages)
+const cartItemsCount = computed(() => store.getters.getCartItemsCount)
+
+const setCurrency = currency => store.commit(SET_CURRENCY, currency)
+const setLanguage = language => store.commit(SET_LANGUAGE, language)
+
 </script>
 
 <style scoped>

@@ -8,7 +8,9 @@
       @blur="focused = false"
   >
     <template v-slot:label="{label}">
-      {{ label }} {{ required ? (focused) ? '' : '*' : '' }}
+      <span v-if="label">
+        {{ label }} {{ required ? (focused) ? '' : '*' : '' }}
+      </span>
     </template>
   </v-select>
 </template>

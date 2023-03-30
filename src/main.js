@@ -21,9 +21,10 @@ app.use(createMetaManager())
 
 app.mixin(responsiveness)
 
+export default app
 
 app.mount('#app')
 
-export default app
+
 
 

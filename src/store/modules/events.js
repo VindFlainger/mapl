@@ -31,6 +31,12 @@ export default {
             setTimeout(() => {
                 commit(DEL_NOTIFICATION, id)
             }, notification.timeout || 3000)
+        },
+        addError({dispatch}, message) {
+            dispatch('addNotification', {
+                type: 'error',
+                message: message
+            })
         }
     }
 }

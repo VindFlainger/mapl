@@ -11,6 +11,9 @@ import AccountOrders from "@/components/Specialized/Account/Orders/AccountOrders
 import AccountWishlist from "@/components/Specialized/Account/Wishlist/AccountWishlist.vue";
 import AccountAddresses from "@/components/Specialized/Account/Shipping/AccountShipping.vue";
 import TestView from "@/views/TestView.vue";
+import AccountPayment from "@/components/Specialized/Account/Payment/AccountPayment.vue";
+import CartView from "@/views/CartView.vue";
+import OrderView from "@/views/OrderView.vue";
 
 const routes = [
     {
@@ -21,6 +24,9 @@ const routes = [
     {
         path: '/customer',
         component: CustomerView,
+        meta: {
+            needAuth: true
+        },
         children: [
             {
                 path: '/dashboard',
@@ -56,6 +62,11 @@ const routes = [
                 path: '/shipping',
                 name: 'customer-shipping',
                 component: AccountAddresses
+            },
+            {
+                path: '/payment',
+                name: 'customer-payment',
+                component: AccountPayment
             }
         ]
     },
@@ -70,15 +81,45 @@ const routes = [
         component: ProductView
     },
     {
+        path: '/product/:id',
+        name: 'product',
+        component: ProductView
+    },
+    {
         path: '/catalog',
         name: 'catalog',
         component: CatalogView
+    },
+    {
+        path: '/cart',
+        name: 'cart',
+        component: CartView
+    },
+    {
+        path: '/order',
+        name: 'order',
+        component: OrderView
     }
 ]
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.find(route => route.meta.needAuth)) {
+        if (!localStorage.getItem('refreshToken')) {
+            next({
+                name: 'home',
+                query: {redirect: to.fullPath}
+            })
+        } else {
+            next()
+        }
+    } else {
+        next()
+    }
 })
 
 export default router
