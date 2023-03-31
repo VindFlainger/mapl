@@ -53,7 +53,7 @@ onMounted(()=>{
 
 
 a {
-  color: #007eff;
+  color: black;
   text-decoration: none;
 }
 

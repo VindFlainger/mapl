@@ -1,14 +1,13 @@
-import {computed, ref} from "vue";
 import {useFetching} from "@/composables/useFetching";
+import {computed, ref} from "vue";
 
-export function useInfinityFetching(options) {
-    const offset = ref(options.offset || 0)
-    const limit = ref(options.limit || 30)
+export function usePaginationFetching(options) {
+    const offset = ref(0)
+    const limit = ref(options.onPage || 30)
     const totalCount = ref(1)
 
-    const isAllLoaded = computed(() => {
-        return totalCount.value <= offset.value
-    })
+    const totalPages = computed(() => Math.ceil(totalCount.value / limit.value))
+    const page = computed(() => Math.ceil((offset.value + limit.value) / limit.value ))
 
     const {
         resolve: $resolve,
@@ -21,20 +20,18 @@ export function useInfinityFetching(options) {
     } = useFetching(options.name || 'machine')
 
     const resolve = (data, options = {}) => {
-        offset.value = data.nextOffset
         totalCount.value = data.totalCount
         $resolve(options)
     }
 
-    const correct = v => {
-        offset.value += v
-        totalCount.value += v
+    const changePage = page => {
+        offset.value = (page - 1) * limit.value
     }
 
     return {
-        offset,
         limit,
-        isAllLoaded,
+        totalPages,
+        page,
         resolve,
         rejected,
         fetching,
@@ -42,6 +39,7 @@ export function useInfinityFetching(options) {
         reject,
         resolved,
         resolvedFirst,
-        correct
+        changePage,
+        offset
     }
 }

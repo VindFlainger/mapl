@@ -1,5 +1,5 @@
 <template>
-  <v-row class="ui-number-input">
+  <v-row class="ui-number-input flex-grow-0">
     <ui-input-default
         class="ui-number-input__input"
         :required="false"

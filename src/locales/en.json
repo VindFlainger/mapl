@@ -81,7 +81,12 @@
     "continue-shopping": "continue shopping"
   },
   "catalog": {
-    "categories": "categories"
+    "categories": "categories",
+    "price": "price",
+    "show": "show",
+    "search": "search",
+    "sizing": "sizing",
+    "colors": "colors"
   },
   "customer": {
     "menu": {

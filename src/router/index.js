@@ -81,12 +81,12 @@ const routes = [
         component: ProductView
     },
     {
-        path: '/product/:id',
+        path: '/product/:productId/:skuId?',
         name: 'product',
         component: ProductView
     },
     {
-        path: '/catalog',
+        path: '/catalog/:category?',
         name: 'catalog',
         component: CatalogView
     },
