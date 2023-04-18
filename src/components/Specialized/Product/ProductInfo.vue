@@ -42,19 +42,31 @@
       </template>
 
       <template v-slot:text>
+        <product-info-reviews-my
+            v-if="isLogin && resolvedFirst"
+            :review="myReview"
+            @save-review="$emit('save-review', $event)"
+        ></product-info-reviews-my>
+
+        <product-info-reviews-other
+            :reviews="othersReviews"
+        ></product-info-reviews-other>
+
         <ui-loading-status
-            :problem="state.matches('reviews.rejected')"
-            :loading="state.matches('reviews.fetching')"
+            :problem="rejected"
+            :loading="fetching"
             @retry="getReviews"
         ></ui-loading-status>
 
-        <product-info-reviews
-            v-if="state.matches('reviews.resolved')"
-            :others-reviews="othersReviews"
-            :my-review="myReview"
-            :show-review-form="isLogin"
-            @save-review="saveReview"
-        ></product-info-reviews>
+        <v-row justify="center">
+          <ui-button-default
+              v-if="!isAllLoaded && !fetching && !rejected"
+              @click="getReviews"
+          >
+            {{ $t('common.buttons.load-more') }}
+          </ui-button-default>
+        </v-row>
+
       </template>
 
     </v-expansion-panel>
@@ -64,17 +76,25 @@
 </template>
 
 <script>
-import ProductInfoReviews from "@/components/Specialized/Product/ProductInfoReviews.vue";
 import {mapGetters} from "vuex";
 import requests from "@/mixins/requests";
-import useFetching from "@/composables/useFetching";
 import UiLoadingStatus from "@/components/UI/UiLoadingStatus.vue";
 import {computed} from "vue";
 import ProductInfoAbout from "@/components/Specialized/Product/ProductInfoAbout.vue";
+import {useInfinityFetching} from "@/composables/useInfinityFetching";
+import UiButtonDefault from "@/components/UI/Buttons/UiButtonDefault.vue";
+import ProductInfoReviewsOther from "@/components/Specialized/Product/ProductInfoReviewsOther.vue";
+import ProductInfoReviewsMy from "@/components/Specialized/Product/ProductInfoReviewsMy.vue";
 
 export default {
   name: "ProductInfo",
-  components: {ProductInfoAbout, UiLoadingStatus, ProductInfoReviews},
+  components: {
+    ProductInfoReviewsMy,
+    ProductInfoReviewsOther,
+    UiButtonDefault,
+    ProductInfoAbout,
+    UiLoadingStatus
+  },
   mixins: [requests],
   data() {
     return {
@@ -112,24 +132,26 @@ export default {
   },
   methods: {
     getReviews() {
-      this.send('REVIEWS_FETCH')
+      this.fetch()
       this.getData(`/catalog/getReviews`,
           null,
           false,
           {
             params: {
               productId: this.$route.params.id,
+              limit: this.limit,
+              offset: this.offset,
               ...this.userId ? {ownerId: this.userId} : {}
             }
           }
       )
           .then(resp => {
-            this.othersReviews = resp.data.others
+            this.othersReviews.push(...resp.data.others)
             this.myReview = resp.data.my
-            this.send('REVIEWS_RESOLVE')
+            this.resolve(resp.data)
           })
           .catch(() => {
-            this.send('REVIEWS_REJECT')
+            this.reject()
           })
     },
     saveReview(review) {
@@ -151,10 +173,30 @@ export default {
     }
   },
   setup() {
-    const {send, state} = useFetching(['reviews'])
+    const {
+      resolved,
+      rejected,
+      fetching,
+      reject,
+      fetch,
+      resolve,
+      isAllLoaded,
+      limit,
+      offset,
+      resolvedFirst
+    } = useInfinityFetching({limit: 10})
+
     return {
-      send,
-      state
+      resolved,
+      rejected,
+      fetching,
+      reject,
+      fetch,
+      resolve,
+      isAllLoaded,
+      limit,
+      offset,
+      resolvedFirst
     }
   },
   provide() {

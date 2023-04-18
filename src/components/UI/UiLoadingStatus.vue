@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <div v-if="loading">
+    <div v-if="lazyLoading">
       <v-progress-circular
           size="63"
           width="10"
@@ -38,6 +38,11 @@
 <script>
 export default {
   name: "UiLoadingStatus",
+  data() {
+    return {
+      lazyLoading: false
+    }
+  },
   props: {
     problem: {
       type: Boolean,
@@ -46,6 +51,17 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    }
+  },
+  watch: {
+    loading(newVal) {
+      if (newVal) {
+        setTimeout(() => {
+          if (this.loading) this.lazyLoading = true
+        }, 300)
+      } else {
+        this.lazyLoading = false
+      }
     }
   }
 }

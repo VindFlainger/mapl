@@ -1,5 +1,8 @@
 {
   "common": {
+    "notifications": {
+      "success": "operation performed successfully"
+    },
     "inputs": {
       "password": "Password",
       "email": "Email",
@@ -8,22 +11,35 @@
       "rating": "Rating"
     },
     "validation-errors": {
-      "required": "{param} is required",
+      "required": "Field is required",
+      "invalid": "Field is not valid",
+      "email-invalid": "Field is not valid email",
+      "password-invalid": "Password must contain 8 characters and at least one number, one letter and one unique character such as !#$%&? ",
       "password-length": "Password should contain at least {n} symbols",
       "password-symbol": "Password should contain at least one special symbol, including [!#$%^&*()_+-<>?]",
       "password-secret": "Your password should not match the login",
       "password-incorrect": "Incorrect password",
-      "email-invalid": "Invalid email"
+      "phone-invalid": "Please enter only numbers without spaces. (example: 375293828333).",
+      "postcode-invalid": "Please enter only numbers without spaces. (example: 230005)."
     },
     "buttons": {
       "login": "Login",
       "sign-up": "Sign up",
       "save": "Save",
-      "retry": "Retry"
+      "retry": "Retry",
+      "load-more": "Load more",
+      "view": "View",
+      "remove": "Remove",
+      "confirm": "Confirm"
     },
     "labels": {
       "loading": "loading",
-      "problem": "fetching error"
+      "problem": "fetching error",
+      "password": "Password",
+      "email": "Email",
+      "summary": "Summary",
+      "review": "Review",
+      "rating": "Rating"
     }
   },
   "login": {
@@ -34,9 +50,6 @@
   "header": {
     "my-account": "My Account",
     "logout": "Sign Out",
-    "bonus": "Bonus Program",
-    "reviews": "Reviews",
-    "orders": "Orders",
     "login": "Sign In"
   },
   "product": {
@@ -53,5 +66,76 @@
     "detailed": "detailed information about",
     "your-review": "Your review",
     "other-reviews": "Other reviews"
+  },
+  "cart": {
+    "product": "product",
+    "size": "size",
+    "quantity": "quantity",
+    "section-name": "shopping cart",
+    "price": "price",
+    "summary": "summary",
+    "total": "total",
+    "regular": "regular price",
+    "sale": "sale",
+    "checkout": "proceed to checkout",
+    "continue-shopping": "continue shopping"
+  },
+  "catalog": {
+    "categories": "categories",
+    "price": "price",
+    "show": "show",
+    "search": "search",
+    "sizing": "sizing",
+    "colors": "colors"
+  },
+  "customer": {
+    "menu": {
+      "dashboard": "my dashboard",
+      "shipping": "my shipping",
+      "orders": "order history",
+      "newsletter": "newsletter subscription",
+      "reviews": "my reviews",
+      "wishlist": "my wishlist",
+      "bonuses": "my bonuses",
+      "payment": "my payment"
+    },
+    "reviews": {
+      "section-name": "My reviews",
+      "my-reviews": "my product reviews"
+    },
+    "shipping": {
+      "section-name": "My shipping",
+      "contact-info": "Contact Information",
+      "about": "You can pick saved contact and address information when you are ordering product.",
+      "address": "Address",
+      "first-name": "First Name",
+      "last-name": "Last Name",
+      "phone": "Phone number",
+      "location": "Location",
+      "city": "City",
+      "street": "Street",
+      "house": "House number",
+      "postcode": "Postcode",
+      "shipping-changed": "Shipping data is successfully changed"
+    },
+    "wishlist": {
+      "section-name": "Wishlist",
+      "no-wishes": "You have no items in your wish list.",
+      "wish-deleted": "Sku is successfully deleted from wishlist"
+    },
+    "newsletter": {
+      "advantages-list": {
+        "up-to": "Stay up to date with the latest trends and receipts",
+        "promotions": "Get notifications about promotions",
+        "delivery": "Control a delivery of your products"
+      },
+      "types": {
+        "promotions": "Promotions",
+        "collections": "New collections",
+        "wishlist": "Wishlist changes"
+      },
+      "section-name": "Newsletter",
+      "advantages": "Advantages of our newsletter"
+    }
   }
 }

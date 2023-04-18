@@ -18,75 +18,69 @@
             variant="outlined"
         >
           <v-card-text class="pa-1 pr-3 pl-3">
+
             <router-link
                 v-for="link in links"
                 :key="link.title"
-                class="d-block text-black text-h6"
+                class="d-block text-black text-h6 text-capitalize"
                 :to="link.to"
                 :active-class="link.class"
                 v-text="link.title"
             ></router-link>
+
             <router-link
                 class="d-block text-black text-h6 font-weight-bold"
-                to=""
                 v-text="$t('header.logout')"
                 @click="logout"
+                :to="{path: '#'}"
             ></router-link>
+
           </v-card-text>
         </v-card>
       </v-menu>
     </div>
     <div v-else>
-      <router-link
+<!--      <router-link
           class="text-h5 font-weight-bold text-black"
           :to="{name: 'home', query: {redirect: $route.fullPath}}"
           v-text="$t('header.login')"
-      ></router-link>
+      ></router-link>-->
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import UiAvatar from "@/components/UI/UiAvatar.vue";
-import {mapActions, mapGetters} from "vuex";
+import {useStore} from "vuex";
+import {computed} from "vue";
+import {useI18n} from "vue-i18n";
 
-export default {
-  name: "AppHeaderMenu",
-  components: {UiAvatar},
-  computed: {
-    ...mapGetters({
-      isLogin: 'isLogin',
-      name: 'getName',
-      avatar: 'getAvatar',
-      gender: 'getGender'
-    }),
-    links() {
-      return [
-        {
-          title: this.$t('header.my-account'),
-          to: {name: 'customer-account'}
-        },
-        {
-          title: this.$t('header.orders'),
-          to: {name: 'customer-orders'}
-        },
-        {
-          title: this.$t('header.reviews'),
-          to: {name: 'customer-reviews'}
-        },
-        {
-          title: this.$t('header.bonus'),
-          to: {name: 'customer-bonus'}
-        },
-      ]
-    }
+const store = useStore()
+const {t} = useI18n()
+
+const isLogin = computed(() => store.getters.isLogin)
+
+const links = computed(() => [
+  {
+    title: t('customer.menu.dashboard'),
+    to: {name: 'customer-dashboard'}
   },
-  methods: {
-    ...mapActions({
-      logout: 'logout'
-    })
+  {
+    title: t('customer.menu.orders'),
+    to: {name: 'customer-orders'}
+  },
+  {
+    title: t('customer.menu.wishlist'),
+    to: {name: 'customer-wishlist'}
+  },
+  {
+    title: t('customer.menu.bonuses'),
+    to: {name: 'customer-bonuses'}
   }
-}
+])
+
+const logout = () => store.dispatch('logout')
+
 </script>
 
 <style scoped>

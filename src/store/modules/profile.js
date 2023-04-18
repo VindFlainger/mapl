@@ -1,14 +1,13 @@
 import { SET_CURRENCY, SET_GENDER, SET_LANGUAGE, SET_LOCATION, SET_NAME} from "@/store/mutation-types";
-import {axiosPipeline} from "../../../utils/axiosMiddlaware";
 import app from "@/main";
 
 export default {
     state: {
         name: null,
         gender: null,
-        language: localStorage.getItem('language') || 'en',
-        currency: localStorage.getItem('currency') || 'byn',
-        location: localStorage.getItem('location') || 'minsk',
+        language: null,
+        currency: null,
+        location: null,
         currencies: ['BYN', 'EUR', 'USD'],
         languages: ['RU', 'EN']
     },
@@ -29,36 +28,20 @@ export default {
             state.gender = gender
         },
         [SET_LANGUAGE](state, language) {
-            if (language) {
-                localStorage.setItem('language', language)
-                state.language = language
-                app.config.globalProperties.$i18n = language
-            }
+            state.language = language || 'en'
+            if (language) localStorage.setItem('language', language)
+            else localStorage.removeItem('language')
+            app.config.globalProperties.$i18n.locale = state.language
         },
         [SET_CURRENCY](state, currency) {
-            if (currency) {
-                localStorage.setItem('currency', currency)
-                state.currency = currency
-            }
+            state.currency = currency || 'byn'
+            if (currency) localStorage.setItem('currency', currency)
+            else localStorage.removeItem('currency')
         },
         [SET_LOCATION](state, location) {
-            localStorage.setItem('location', location)
-            state.location = location
-        }
-    },
-    actions: {
-        authed({commit}) {
-            axiosPipeline.get('/customer/account/shortData', {needAuth: true})
-                .then(resp => {
-                    commit(SET_NAME, resp.data.name)
-                    commit(SET_GENDER, resp.data.gender)
-                    commit(SET_LANGUAGE, resp.data.localization.language)
-                    commit(SET_CURRENCY, resp.data.localization.currency)
-                    commit(SET_LOCATION, resp.data.localization.location)
-                })
-                .catch(() => {
-
-                })
+            state.location = location || 'minsk'
+            if (location) localStorage.setItem('location', location)
+            else localStorage.removeItem('location')
         }
     }
 }

@@ -4,27 +4,23 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import {ref, watch} from "vue";
 
 import LoginDialog from "@/components/Specialized/Auth/Login/LoginDialog.vue";
+import {useRoute} from "vue-router";
 
-export default {
-  name: 'HomeView',
-  data() {
-    return {
-      loginView: false
-    }
-  },
-  watch: {
-    $route: {
-      handler(v) {
-        if (v.query.redirect) {
-          this.loginView = true
-        }
-      },
+const route = useRoute()
+
+const loginView = ref(false)
+
+watch(
+    route,
+    () => {
+      if (route.query.redirect) {
+        loginView.value = true
+      }
+    }, {
       immediate: true
-    }
-  },
-  components: {LoginDialog}
-}
+    })
 </script>
